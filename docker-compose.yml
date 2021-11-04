@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  proxy:
+    image: nginx:alpine
+    container_name: proxy
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /data/nginx/cache:/data/nginx/cache
+      - ./www-data:/www-data
+    restart: 'unless-stopped'
+    networks:
+      - backend
+    environment:
+      - TZ=Asia/Bangkok
+  # server:
+  #   build:
+  #     context: ./
+  #     target: production-build-stage
+  #     dockerfile: Dockerfile
+  #   container_name: server
+  #   ports:
+  #     - '3000:3000'
+  #   volumes:
+  #     - ./:/app
+  #     - /app/node_modules
+  #   restart: 'unless-stopped'
+  #   environment:
+  #     - TZ=Asia/Bangkok
+  #   networks:
+  #     - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
